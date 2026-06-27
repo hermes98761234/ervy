@@ -7,6 +7,6 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Volodymyr Kopytsia"]
 license = "MIT"
-repository = "https://github.com/ervy-rs/ervy"
+repository = "https://github.com/hermes98761234/ervy"
 keywords = ["chart", "terminal", "ascii", "tui", "visualization"]
 categories = ["visualization", "command-line-utilities"]
