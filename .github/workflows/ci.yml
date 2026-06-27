@@ -52,32 +52,32 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             cross: false
-            bin: ervy
+            bin: ervy-cli
           # Linux ARM64 (aarch64)
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
             cross: true
-            bin: ervy
+            bin: ervy-cli
           # Linux ARMv7
           - target: armv7-unknown-linux-gnueabihf
             os: ubuntu-latest
             cross: true
-            bin: ervy
+            bin: ervy-cli
           # macOS x86_64
           - target: x86_64-apple-darwin
             os: macos-13
             cross: false
-            bin: ervy
+            bin: ervy-cli
           # macOS aarch64 (Apple Silicon)
           - target: aarch64-apple-darwin
             os: macos-14
             cross: false
-            bin: ervy
+            bin: ervy-cli
           # Windows x86_64
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             cross: false
-            bin: ervy.exe
+            bin: ervy-cli.exe
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -115,15 +115,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          SRC="target/${{ matrix.target }}/release/${{ matrix.bin }}"
           NAME="ervy-${{ matrix.target }}"
           mkdir -p artifacts
-          # Find the binary (cross may name it differently)
-          SRC=$(find target/${{ matrix.target }}/release/ -maxdepth 1 -name 'ervy*' -type f ! -name '*.d' ! -name '*.rlib' ! -name '*.dSYM' | head -1)
-          if [ -z "$SRC" ]; then
-            echo "ERROR: binary not found for ${{ matrix.target }}"
-            ls -la target/${{ matrix.target }}/release/ 2>/dev/null || true
-            exit 1
-          fi
           cp "$SRC" "artifacts/${{ matrix.bin }}"
           cd artifacts
           if [[ "${{ matrix.bin }}" == *.exe ]]; then
