@@ -24,7 +24,7 @@ pub fn pie(data: &[Datum], opts: &PieOptions) -> String {
         return String::new();
     }
 
-    let total: f64 = data.iter().map(|d| get_datum_value(d)).sum();
+    let total: f64 = data.iter().map(get_datum_value).sum();
     if total <= 0.0 {
         return String::new();
     }
