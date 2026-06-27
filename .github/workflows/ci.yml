@@ -115,9 +115,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SRC="target/${{ matrix.target }}/release/${{ matrix.bin }}"
           NAME="ervy-${{ matrix.target }}"
           mkdir -p artifacts
+          # Find the binary (cross may name it differently)
+          SRC=$(find target/${{ matrix.target }}/release/ -maxdepth 1 -name 'ervy*' -type f ! -name '*.d' ! -name '*.rlib' ! -name '*.dSYM' | head -1)
+          if [ -z "$SRC" ]; then
+            echo "ERROR: binary not found for ${{ matrix.target }}"
+            ls -la target/${{ matrix.target }}/release/ 2>/dev/null || true
+            exit 1
+          fi
           cp "$SRC" "artifacts/${{ matrix.bin }}"
           cd artifacts
           if [[ "${{ matrix.bin }}" == *.exe ]]; then
@@ -125,8 +131,6 @@ jobs:
           else
             tar czf "../${NAME}.tar.gz" "${{ matrix.bin }}"
           fi
-        env:
-          PATH: "/root/.cargo/bin:$PATH"
 
       - uses: actions/upload-artifact@v4
         with:
