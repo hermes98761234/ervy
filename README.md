@@ -118,6 +118,4 @@ cargo build --release -p ervy-cli
 
 MIT
 
----
 
-<sub>Built with 🦀 by Volodymyr Kopytsia</sub>
